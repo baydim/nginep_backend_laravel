@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\HotelFacilController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\mulimage;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,18 +22,23 @@ use App\Http\Controllers\RoomController;
 //     return $request->user();
 // });
 
+
+////hotel
 Route::get('/hotel', [HotelController::class, 'index']);
 Route::get('/hotel/idhotel={id}', [HotelController::class, 'hoteldetail']);
-/////cari hotel
 Route::get('hotel/cari/alamat={alamat}', [HotelController::class, 'carihotel']);
-///add hotel
 Route::post('hotel/add/', [HotelController::class, 'addhotel']);
 
 
 /////roomcontroller
 Route::get('/hotel/rooms/idrooms={id}', [RoomController::class, 'detail']);
+Route::post('/hotel/rooms/add', [RoomController::class, 'addroom']);
 
 
 /////hotelfacilcontroller
-Route::get('hotel/facil/hotel_id={hotel_id}', [HotelFacilController::class, 'facil']);
+Route::get('/hotel/facil/hotel_id={hotel_id}', [HotelFacilController::class, 'facil']);
 Route::get('/facil/hapus/facil_id={facil_id}', [HotelFacilController::class, 'deletfacil']);
+
+
+//tesmultiple
+Route::post('/mul', [mulimage::class, 'mul']);

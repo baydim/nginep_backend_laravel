@@ -7,7 +7,6 @@ use App\Models\hotelfacil;
 use App\Models\room;
 use App\Models\roomfacil;
 use App\Models\imagehotel;
-use App\Models\imageroom;
 use Intervention\Image\Facades\Image;
 
 use Illuminate\Http\Request;
@@ -81,12 +80,12 @@ class HotelController extends Controller
             foreach ($room as $a => $keyroom) {
 
                 ///imageroom
-                $image_room = imageroom::where('room_id', $keyroom->id)->get();
-                $imgro = [];
-                foreach ($image_room as $val) {
-                    $imgro[] = $val->detail_image;
-                }
-                $kamar[$a]['image_room'] = $imgro;
+                // $image_room = imageroom::where('room_id', $keyroom->id)->get();
+                // $imgro = [];
+                // foreach ($image_room as $val) {
+                //     $imgro[] = $val->detail_image;
+                // }
+                // $kamar[$a]['image_room'] = $imgro;
                 ///imageroom
 
 
@@ -144,13 +143,9 @@ class HotelController extends Controller
             $fotorender = Image::make($foto)->resize(600, null, function ($con) {
                 $con->aspectRatio();
             });
-
-
-
             /////////
             $file =  Storage::disk('public')->put("thumbnail/" . $fotoname, (string) $fotorender->encode());
             // return response()->json([$fotoname]) ;
-
             if ($file) {
                 $finish =  hotel::create([
                     'nama' => $req->nama,
