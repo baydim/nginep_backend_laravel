@@ -6,14 +6,13 @@ use App\Models\hotel;
 use App\Models\hotelfacil;
 use App\Models\room;
 use App\Models\roomfacil;
+use App\Models\imagehotel;
+use App\Models\imageroom;
 use Intervention\Image\Facades\Image;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-
-use function PHPUnit\Framework\isNull;
 
 class HotelController extends Controller
 {
@@ -24,12 +23,23 @@ class HotelController extends Controller
     {
         $data = hotel::all();
         foreach ($data as $key => $val) {
+            ///fasilitashotel
             $fasilitas = hotelfacil::where('hotel_id', $val->id)->get();
             $arr = [];
             foreach ($fasilitas as $da) {
                 $arr[] =  $da->facil;
             }
             $data[$key]['fasilitas'] = $arr;
+            ///fasilitashotel
+
+            ///imagehotel
+            $imagehoel = imagehotel::where('hotel_id', $val->id)->get();
+            $imgh = [];
+            foreach ($imagehoel as $val) {
+                $imgh[] = $val->detail_image;
+            }
+            $data[$key]['image_hotel'] = $imgh;
+            ///imagehotel
         }
         return response()->json(['data' => $data]);
     }
@@ -45,6 +55,14 @@ class HotelController extends Controller
                 'data' => []
             ]);
         } else {
+            ////imagehotel
+            $imagehot = imagehotel::where('hotel_id', $data->id)->get();
+            $imghot = [];
+            foreach ($imagehot as $imgh) {
+                $imghot[] = $imgh->detail_image;
+            }
+            $data['image_hotel'] = $imghot;
+            ////imagehotel
 
 
             ///fasilitas hotel
@@ -55,20 +73,35 @@ class HotelController extends Controller
                 $ar[] = $value->facil;
             }
             $data['fasilitas_hotel'] = $ar;
+            ///fasilitas hotel
 
             //roomhotel
             $room = room::where('hotel_id', $data->id)->get();
             $kamar =  $data['kamar'] = $room;
             foreach ($room as $a => $keyroom) {
 
+                ///imageroom
+                $image_room = imageroom::where('room_id', $keyroom->id)->get();
+                $imgro = [];
+                foreach ($image_room as $val) {
+                    $imgro[] = $val->detail_image;
+                }
+                $kamar[$a]['image_room'] = $imgro;
+                ///imageroom
+
+
+                ///fasilitas room
                 $fasilitas_room = roomfacil::where('room_id', $keyroom->id)->get();
-                // $kamar[$a]['fasilitas_room'] = $fasilitas_room;
                 $roomid = [];
                 foreach ($fasilitas_room as $fr => $from) {
                     $roomid[] = $from->facil;
                 }
                 $kamar[$a]['fasilitas_room'] = $roomid;
+                ///fasilitas room
+
+
             }
+            //roomhotel
 
             return response()->json([
                 'message' => 'succes',
@@ -80,7 +113,16 @@ class HotelController extends Controller
     ///carihotel
     public function carihotel($alamat)
     {
-        $data = hotel::where('alamat', 'like', '%' . $alamat . '%')->with('fasilitas:facil,hotel_id')->get();
+        $data = hotel::where('alamat', 'like', '%' . $alamat . '%')->get();
+
+        foreach ($data as $key => $val) {
+            $fasilitas = hotelfacil::where('hotel_id', $val->id)->get();
+            $arr = [];
+            foreach ($fasilitas as $da) {
+                $arr[] =  $da->facil;
+            }
+            $data[$key]['fasilitas'] = $arr;
+        }
         return response()->json(['data' => $data]);
     }
 
@@ -106,8 +148,6 @@ class HotelController extends Controller
 
 
             /////////
-
-
             $file =  Storage::disk('public')->put("thumbnail/" . $fotoname, (string) $fotorender->encode());
             // return response()->json([$fotoname]) ;
 

@@ -7,6 +7,7 @@ use App\Models\room;
 use App\Models\hotel;
 use App\Models\hotelfacil;
 use App\Models\roomfacil;
+use App\Models\imageroom;
 
 class RoomController extends Controller
 {
@@ -16,6 +17,15 @@ class RoomController extends Controller
         if ($data == null) {
             return response()->json(['data' => $data]);
         } else {
+            /////imageroom
+            $imageroom = imageroom::where('room_id', $data->id)->get();
+            $imgr = [];
+            foreach ($imageroom as $value) {
+                $imgr[] =  $value->detail_image;
+            }
+            $data['image_room'] = $imgr;
+            /////imageroom
+
             /////facilkamar
             $fasilitas_room = roomfacil::where('room_id', $data->id)->get();
             $roomid = [];
@@ -23,8 +33,7 @@ class RoomController extends Controller
                 $roomid[] = $from->facil;
             }
             $data['fasilitas_room'] = $roomid;
-
-
+            /////facilkamar
 
             ////hotel
             $hotel = hotel::find($data->hotel_id);
@@ -35,12 +44,12 @@ class RoomController extends Controller
 
             $hotelfacil = hotelfacil::where('hotel_id', $hotel->id)->get();
             $hotelfa = [];
-            
+
             foreach ($hotelfacil as $hf => $hofa) {
                 $hotelfa[] = $hofa->facil;
             }
             $data['fasilitas_hotel'] = $hotelfa;
-            // $data['hotel'] = $hotel->nama;
+
 
             return response()->json(['data' => (['kamar' => $data,])]);
         }
