@@ -75,8 +75,17 @@ class HotelController extends Controller
             ///fasilitas hotel
 
             //roomhotel
-            $room = room::where('hotel_id', $data->id)->paginate(10);
-            $kamar =  $data['kamar'] = $room;
+            $room = room::where('hotel_id', $data->id) ->paginate(10);
+
+
+            $data['total_kamar'] = $room->total();
+            ///
+            $kamar =  $data['kamar'] = $room->items();
+            ///
+            $data['next_page'] = $room->nextPageUrl();
+            $data['total_page'] = $room->lastPage();
+
+
             foreach ($room as $a => $keyroom) {
 
                 ///imageroom
