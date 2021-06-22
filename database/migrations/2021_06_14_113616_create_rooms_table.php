@@ -17,10 +17,14 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->bigInteger('hotel_id');
             $table->text('nama');
+            $table->text('thumbnail');
             $table->bigInteger('kasur');
             $table->boolean('status');
             $table->text('deskripsi');
             $table->bigInteger('harga');
+            $table->text('alamat');
+            $table->double('lat');
+            $table->double('long');
             $table->timestamps();
         });
     }

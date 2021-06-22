@@ -33,6 +33,7 @@ Route::post('hotel/add/', [HotelController::class, 'addhotel']);
 /////roomcontroller
 Route::get('/hotel/rooms/idrooms={id}', [RoomController::class, 'detail']);
 Route::post('/hotel/rooms/add', [RoomController::class, 'addroom']);
+Route::get('/hotel/rooms/delete/idrooms={id}', [RoomController::class, 'deleteroom']);
 
 
 /////hotelfacilcontroller
