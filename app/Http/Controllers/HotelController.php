@@ -78,12 +78,13 @@ class HotelController extends Controller
 
 
             //roomhotel
-            $induk = room::where('hotel_id', $data->id);
-            $room = $induk->where('status', 0)->paginate(10);
+
+            $room =  room::where('hotel_id', $data->id)->where('status', 0)->paginate(10);
 
             $data['total_kamar'] = room::where('hotel_id', $data->id)->count();
-            $data['kamar_kosong'] = $induk->where('status', 0)->count();
+            $data['kamar_kosong'] = room::where('hotel_id', $data->id)->where('status', 0)->count();
             $data['next_page'] = $room->nextPageUrl();
+            $data['previous_page'] = $room->previousPageUrl();
             $data['total_page'] = $room->lastPage();
 
             ///
@@ -112,8 +113,6 @@ class HotelController extends Controller
                 }
                 $kamar[$a]['fasilitas_room'] = $roomid;
                 ///fasilitas room
-
-
             }
             //roomhotel
 
