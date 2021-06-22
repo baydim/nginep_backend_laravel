@@ -74,16 +74,22 @@ class HotelController extends Controller
             $data['fasilitas_hotel'] = $ar;
             ///fasilitas hotel
 
+
+
+
             //roomhotel
-            $room = room::where('hotel_id', $data->id) ->paginate(10);
+            $induk = room::where('hotel_id', $data->id);
+            $room = $induk->where('status', 0)->paginate(10);
 
+            $data['total_kamar'] = room::where('hotel_id', $data->id)->count();
+            $data['kamar_kosong'] = $induk->where('status', 0)->count();
+            $data['next_page'] = $room->nextPageUrl();
+            $data['total_page'] = $room->lastPage();
 
-            $data['total_kamar'] = $room->total();
             ///
             $kamar =  $data['kamar'] = $room->items();
             ///
-            $data['next_page'] = $room->nextPageUrl();
-            $data['total_page'] = $room->lastPage();
+
 
 
             foreach ($room as $a => $keyroom) {
