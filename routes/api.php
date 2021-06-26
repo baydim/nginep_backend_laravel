@@ -27,20 +27,17 @@ use App\Http\Controllers\Room_Controller;
 ///auth
 Route::post('/login', [Auth_controller::class, 'login']);
 Route::post('/regis', [Auth_controller::class, 'regis']);
+Route::post('/logout', [Auth_controller::class, 'logout']);
+Route::post('/logoutall', [Auth_controller::class, 'logoutall']);
 
 
 ///route groub sactum
-
 Route::group(['middleware' => 'auth:sanctum'], function () {
-
-    ////new
+    ////hotel
     Route::get('/hotel', [Hotel_Controller::class, 'allHotel']);
     Route::get('/hotel/id={id}', [Hotel_Controller::class, 'detailHotel']);
     Route::get('/hotel/delete/id={id}', [Hotel_Controller::class, 'deletHotel']);
     Route::post('hotel/add/', [Hotel_Controller::class, 'addHotel']);
-
-
-
     ///room
     Route::get('/room', [Room_Controller::class, 'allRoom']);
     Route::get('/room/id={id}', [Room_Controller::class, 'detailRoom']);
