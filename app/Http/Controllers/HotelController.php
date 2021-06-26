@@ -79,16 +79,16 @@ class HotelController extends Controller
 
             //roomhotel
 
-            $room =  room::where('hotel_id', $data->id)->where('status', 0)->paginate(10);
+            $room =  room::where('hotel_id', $data->id)->where('status', 0)->get();
 
             $data['total_kamar'] = room::where('hotel_id', $data->id)->count();
             $data['kamar_kosong'] = room::where('hotel_id', $data->id)->where('status', 0)->count();
-            $data['next_page'] = $room->nextPageUrl();
-            $data['previous_page'] = $room->previousPageUrl();
-            $data['total_page'] = $room->lastPage();
-
+            // $data['next_page'] = $room->nextPageUrl();
+            // $data['previous_page'] = $room->previousPageUrl();
+            // $data['total_page'] = $room->lastPage();
+            
             ///
-            $kamar =  $data['kamar'] = $room->items();
+            $kamar =  $data['kamar'] = $room;
             ///
 
 
@@ -140,94 +140,94 @@ class HotelController extends Controller
     }
 
     ///addhotel
-    public function addhotel(Request $req)
-    {
-        $this->validate($req, [
-            'nama' => 'required',
-            'alamat' => 'required',
-            'lat' => 'required',
-            'long' => 'required',
-        ]);
+    // public function addhotel(Request $req)
+    // {
+    //     $this->validate($req, [
+    //         'nama' => 'required',
+    //         'alamat' => 'required',
+    //         'lat' => 'required',
+    //         'long' => 'required',
+    //     ]);
 
 
 
-        if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null) {
-            return response()->json([
-                'message' => 'failed'
-            ]);
-        } else {
-            $foto = $req->file('thumbnail');
-            $fotoname = time() . '.' . $foto->getClientOriginalExtension();
-            /////
-            ////
-            $fotorender = Image::make($foto)->resize(600, null, function ($con) {
-                $con->aspectRatio();
-            });
-            /////////
-            $file =  Storage::disk('public')->put("thumbnail/hotel/" . $fotoname, (string) $fotorender->encode());
-            // return response()->json([$fotoname]) ;
-            if ($file) {
-                ////input hotel
-                $finish =  hotel::create([
-                    'nama' => $req->nama,
-                    'alamat' => $req->alamat,
-                    'lat' => $req->lat,
-                    'long' => $req->long,
-                    'thumbnail' => '/storage/thumbnail/hotel/' . $fotoname,
-                ]);
-                ///////input hotel
+    //     if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null) {
+    //         return response()->json([
+    //             'message' => 'failed'
+    //         ]);
+    //     } else {
+    //         $foto = $req->file('thumbnail');
+    //         $fotoname = time() . '.' . $foto->getClientOriginalExtension();
+    //         /////
+    //         ////
+    //         $fotorender = Image::make($foto)->resize(600, null, function ($con) {
+    //             $con->aspectRatio();
+    //         });
+    //         /////////
+    //         $file =  Storage::disk('public')->put("thumbnail/hotel/" . $fotoname, (string) $fotorender->encode());
+    //         // return response()->json([$fotoname]) ;
+    //         if ($file) {
+    //             ////input hotel
+    //             $finish =  hotel::create([
+    //                 'nama' => $req->nama,
+    //                 'alamat' => $req->alamat,
+    //                 'lat' => $req->lat,
+    //                 'long' => $req->long,
+    //                 'thumbnail' => '/storage/thumbnail/hotel/' . $fotoname,
+    //             ]);
+    //             ///////input hotel
 
-                /////addfacil
-                $data = json_decode($req->facil);
-                $fa = [];
-                foreach ($data as $val) {
-                    $fa[] = hotelfacil::create([
-                        'hotel_id' => $finish->id,
-                        'facil' => $val,
-                    ]);
-                }
-                /////addfacil
-
-
-                ////upload image detail hotel
-                $f = [];
-                foreach ($req->file('details')  as $value) {
-
-                    $fotoname = time() . '.' . $value->getClientOriginalExtension();
-                    /////
-                    ////
-                    $fotorender = Image::make($value)->resize(600, null, function ($con) {
-                        $con->aspectRatio();
-                    });
-                    /////////
-                    $file =  Storage::disk('public')->put("detail/hotel/" . $fotoname, (string) $fotorender->encode());
-                    if ($file) {
-                        $data = imagehotel::create([
-
-                            'hotel_id' => 1,
-                            'detail_image' => "/detail/hotel/" . $fotoname,
-
-                        ]);
-                        $f[] = $data;
-                    } else {
-                        return response()->json(['message' => 'cant upload image detail hotel']);
-                    }
-                }
-                ////upload image detail hotel
+    //             /////addfacil
+    //             $data = json_decode($req->facil);
+    //             $fa = [];
+    //             foreach ($data as $val) {
+    //                 $fa[] = hotelfacil::create([
+    //                     'hotel_id' => $finish->id,
+    //                     'facil' => $val,
+    //                 ]);
+    //             }
+    //             /////addfacil
 
 
-                return response()->json([
-                    'message' => 'succes',
-                    'data' => $finish,
-                    'fasilitas' => $fa,
-                    'image_hotel' => $f,
-                ]);
-            } else {
-                return response()->json([
-                    'message' => 'failed, because data not complete'
-                ]);
-            }
-        }
-    }
+    //             ////upload image detail hotel
+    //             $f = [];
+    //             foreach ($req->file('details')  as $value) {
+
+    //                 $fotoname = time() . '.' . $value->getClientOriginalExtension();
+    //                 /////
+    //                 ////
+    //                 $fotorender = Image::make($value)->resize(600, null, function ($con) {
+    //                     $con->aspectRatio();
+    //                 });
+    //                 /////////
+    //                 $file =  Storage::disk('public')->put("detail/hotel/" . $fotoname, (string) $fotorender->encode());
+    //                 if ($file) {
+    //                     $data = imagehotel::create([
+
+    //                         'hotel_id' => $finish->id,
+    //                         'detail_image' => "/storage/detail/hotel/" . $fotoname,
+
+    //                     ]);
+    //                     $f[] = $data;
+    //                 } else {
+    //                     return response()->json(['message' => 'cant upload image detail hotel']);
+    //                 }
+    //             }
+    //             ////upload image detail hotel
+
+
+    //             return response()->json([
+    //                 'message' => 'succes',
+    //                 'data' => $finish,
+    //                 'fasilitas' => $fa,
+    //                 'image_hotel' => $f,
+    //             ]);
+    //         } else {
+    //             return response()->json([
+    //                 'message' => 'failed, because data not complete'
+    //             ]);
+    //         }
+    //     }
+    // }
     ///addhotel
 }

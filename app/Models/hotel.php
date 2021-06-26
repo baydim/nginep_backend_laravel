@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\hotelfacil;
 use App\Models\room;
-use Whoops\Run;
+use App\Models\imagehotel;
+
 
 class hotel extends Model
 {
@@ -15,14 +16,14 @@ class hotel extends Model
     protected $fillable = ['id', 'nama', 'alamat', 'lat', 'long', 'thumbnail'];
     // protected $hide = ['created_at', 'updated_at'];
 
+
+    public function image_hotel()
+    {
+        return $this->hasMany(imagehotel::class);
+    }
     public function fasilitas()
     {
         return $this->hasMany(hotelfacil::class);
-    }
-    
-    public function fa()
-    {
-        return $this->hasMany(hotelfacil::class)->get('facil');
     }
 
     public function rooms()

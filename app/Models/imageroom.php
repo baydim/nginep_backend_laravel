@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class imageroom extends Model
 {
     use HasFactory;
+    protected $table = 'imagerooms';
+    protected $fillable = ['id', 'room_id', 'detail_image'];
 }
