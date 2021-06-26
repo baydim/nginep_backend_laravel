@@ -89,7 +89,7 @@ class Hotel_Controller extends Controller
     }
 
     /////addhotel
-    public function addhotel(Request $req)
+    public function addHotel(Request $req)
     {
         // $this->validate($req, [
         //     'nama' => 'required',

@@ -32,12 +32,12 @@ use App\Http\Controllers\Room_Controller;
 // Route::get('/hotel', [HotelController::class, 'index']);
 // Route::get('/hotel/idhotel={id}', [HotelController::class, 'hoteldetail']);
 // Route::get('hotel/cari/alamat={alamat}', [HotelController::class, 'carihotel']);
-Route::post('hotel/add/', [HotelController::class, 'addhotel']);
+// Route::post('hotel/add/', [HotelController::class, 'addhotel']);
 
 
 // /////roomcontroller
 // Route::get('/hotel/rooms/idrooms={id}', [RoomController::class, 'detail']);
-Route::post('/hotel/rooms/add', [RoomController::class, 'addroom']);
+// Route::post('/hotel/rooms/add', [RoomController::class, 'addroom']);
 // Route::get('/hotel/rooms/delete/idrooms={id}', [RoomController::class, 'deleteroom']);
 
 
@@ -55,6 +55,7 @@ Route::post('/hotel/rooms/add', [RoomController::class, 'addroom']);
 Route::get('/hotel', [Hotel_Controller::class, 'allHotel']);
 Route::get('/hotel/id={id}', [Hotel_Controller::class, 'detailHotel']);
 Route::get('/hotel/delete/id={id}', [Hotel_Controller::class, 'deletHotel']);
+Route::post('hotel/add/', [Hotel_Controller::class, 'addHotel']);
 
 
 
