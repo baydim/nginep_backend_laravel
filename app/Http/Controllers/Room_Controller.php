@@ -19,7 +19,6 @@ class Room_Controller extends Controller
         return response()->json(['message' => 'succes', 'data' => $data]);
     }
 
-
     public function detailRoom($id)
     {
         $data = room::where('id', $id)->with('image_room:room_id,detail_image', 'fasilitas:room_id,facil')->first();

@@ -20,11 +20,8 @@ class Auth_controller extends Controller
                 'message' => 'Invalid login details'
             ], 401);
         }
-
         $user = User::where('email', $request['email'])->firstOrFail();
-
         $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
             'user' => $user,
             'access_token' => $token,
@@ -41,15 +38,12 @@ class Auth_controller extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
-
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
-
         $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
             'user' => $user,
             'access_token' => $token,
@@ -76,7 +70,6 @@ class Auth_controller extends Controller
     {
         $user =  User::find($request->id);
         $user->tokens()->delete();
-
         $respon = [
             'status' => 'success',
             'msg' => 'Logout successfully',

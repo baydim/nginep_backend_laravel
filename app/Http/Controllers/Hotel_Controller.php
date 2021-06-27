@@ -24,7 +24,6 @@ class Hotel_Controller extends Controller
     public function detailHotel($id)
     {
         $data = hotel::find($id);
-
         if ($data == null) {
             return response()->json(['message' => 'data not found', 'data' => $data]);
         }
@@ -66,7 +65,6 @@ class Hotel_Controller extends Controller
                             $b->delete();
                         }
                     }
-
                     $value->delete();
                 }
             }
@@ -174,7 +172,6 @@ class Hotel_Controller extends Controller
                     'fasilitas' => $fa,
                     'fasilitas_text' => $fat,
                     'image_hotel' => $f,
-
                 ]);
             } else {
                 return response()->json([
