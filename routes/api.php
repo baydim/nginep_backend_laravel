@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('hotel/add/', [Hotel_Controller::class, 'addHotel']);
     ///room
     Route::get('/room', [Room_Controller::class, 'allRoom']);
-    Route::get('/room/id={id}', [Room_Controller::class, 'detailRoom']);
     Route::post('/room/add/', [Room_Controller::class, 'addRoom']);
 });
+
+///room
+Route::get('/room/id={id}', [Room_Controller::class, 'detailRoom']);
