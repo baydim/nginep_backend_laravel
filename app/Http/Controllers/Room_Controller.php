@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\hotel;
 use App\Models\hotelfacil;
+use App\Models\hoteltextfacils;
 use Illuminate\Http\Request;
 use App\Models\room;
 use Intervention\Image\Facades\Image;
@@ -21,10 +22,21 @@ class Room_Controller extends Controller
 
     public function detailRoom($id)
     {
-        $data = room::where('id', $id)->with('image_room:room_id,detail_image', 'fasilitas:room_id,facil')->first();
-        $data['hotel'] = hotel::find($data->hotel_id)->pluck('nama')->first();
-        $data['fasilitas_hotel'] = hotelfacil::where('hotel_id', $data->hotel_id)->pluck('facil');
-        return response()->json(['message' => 'succes', 'data' => $data]);
+        // $data = room::where('id', $id)->with('image_room:room_id,detail_image', 'fasilitas:room_id,facil');
+
+        $data = room::find($id);
+
+        if (!$data) {
+            return response()->json(['message' => 'data tidak ada', 'data' => $data]);
+        } else {
+
+            $data['image_room'] = imageroom::where('room_id', $data->id)->pluck('detail_image');
+            $data['fasilitas_room'] = roomfacil::where('room_id', $data->id)->pluck('facil');
+            $data['hotel'] = hotel::find($data->hotel_id)->pluck('nama')->first();
+            $data['fasilitas_hotel'] = hotelfacil::where('hotel_id', $data->hotel_id)->pluck('facil');
+            $data['fasilitas_text_hotel'] = hoteltextfacils::where('hotel_id', $data->hotel_id)->pluck('facil');
+            return response()->json(['message' => 'succes', 'data' => $data]);
+        }
     }
 
 

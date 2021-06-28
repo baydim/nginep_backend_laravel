@@ -33,15 +33,14 @@ Route::post('/logoutall', [Auth_controller::class, 'logoutall']);
 
 ///route groub sactum
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    ////hotel
     Route::get('/hotel', [Hotel_Controller::class, 'allHotel']);
     Route::get('/hotel/id={id}', [Hotel_Controller::class, 'detailHotel']);
     Route::get('/hotel/delete/id={id}', [Hotel_Controller::class, 'deletHotel']);
     Route::post('hotel/add/', [Hotel_Controller::class, 'addHotel']);
-    ///room
+    
     Route::get('/room', [Room_Controller::class, 'allRoom']);
+    Route::get('/room/id={id}', [Room_Controller::class, 'detailRoom']);
     Route::post('/room/add/', [Room_Controller::class, 'addRoom']);
 });
 
 ///room
-Route::get('/room/id={id}', [Room_Controller::class, 'detailRoom']);
