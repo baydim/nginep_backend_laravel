@@ -13,7 +13,7 @@ class hotel extends Model
 {
     use HasFactory;
     protected $table = 'hotels';
-    protected $fillable = ['id', 'nama', 'alamat', 'lat', 'long', 'thumbnail'];
+    protected $fillable = ['id', 'nama', 'alamat', 'lat', 'long', 'thumbnail','deskripsi'];
     // protected $hide = ['created_at', 'updated_at'];
 
 

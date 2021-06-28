@@ -96,7 +96,7 @@ class Hotel_Controller extends Controller
         //     'lat' => 'required',
         //     'long' => 'required',
         // ]);
-        if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null || $req->faciltext == null || $req->facil == null) {
+        if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null || $req->faciltext == null || $req->facil == null || $req->deskripsi == null ) {
             return response()->json([
                 'message' => 'gagal'
             ]);
@@ -114,6 +114,7 @@ class Hotel_Controller extends Controller
                 $finish =  hotel::create([
                     'nama' => $req->nama,
                     'alamat' => $req->alamat,
+                    'deskripsi' => $req->deskripsi,
                     'lat' => $req->lat,
                     'long' => $req->long,
                     'thumbnail' => '/storage/thumbnail/hotel/' . $fotoname,

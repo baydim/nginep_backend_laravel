@@ -17,6 +17,7 @@ class CreateHotelsTable extends Migration
             $table->id();
             $table->text('nama');
             $table->text('alamat');
+            $table->text('deskripsi');
             $table->double('lat');
             $table->double('long');
             $table->text('thumbnail');
