@@ -50,6 +50,10 @@ class Room_Controller extends Controller
             $fotorender = Image::make($foto)->resize(600, null, function ($con) {
                 $con->aspectRatio();
             });
+            $watermark = Image::make('storage/Nginep.png')->resize(80, null, function ($con) {
+                $con->aspectRatio();
+            });
+            $fotorender->insert($watermark, 'center');
             $file =  Storage::disk('public')->put("thumbnail/room/" . $fotoname, (string) $fotorender->encode());
             if ($file) {
                 $hotel = hotel::find($req->hotel_id);
@@ -79,6 +83,10 @@ class Room_Controller extends Controller
                     $fotorender = Image::make($a)->resize(600, null, function ($con) {
                         $con->aspectRatio();
                     });
+                    $watermark = Image::make('storage/Nginep.png')->resize(80, null, function ($con) {
+                        $con->aspectRatio();
+                    });
+                    $fotorender->insert($watermark, 'center');
                     $file =  Storage::disk('public')->put("detail/room/" . $fotoname, (string) $fotorender->encode());
                     if ($file) {
                         $details_room[] = imageroom::create([

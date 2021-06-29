@@ -30,7 +30,7 @@ class Hotel_Controller extends Controller
         $data['fasilitas_hotel'] = hotelfacil::where('hotel_id', $data->id)->pluck('facil');
         $data['fasilitas_text_hotel'] = hoteltextfacils::where('hotel_id', $data->id)->pluck('facil');
         $data['image_hotel'] = imagehotel::where('hotel_id', $data->id)->pluck('detail_image');
-        $kamar = room::where('hotel_id', $data->id)->where('status', 0)->with('fasilitas:room_id,facil', 'image_room:room_id,detail_image')->get();
+        $kamar = room::where('hotel_id', $data->id)->where('status', 0)->select('id', 'nama', 'thumbnail', 'kasur', 'status', 'harga', 'alamat')->with(('fasilitas:room_id,facil'))->get();
         $data['kosong'] = $kamar->count();
         $data['kamar'] = $kamar;
         return response()->json(['message' => 'succes',  'data' => $data]);
@@ -38,11 +38,13 @@ class Hotel_Controller extends Controller
 
     public function deletHotel($id)
     {
+        
         $data = hotel::find($id);
 
         if ($data == null) {
             return response()->json(['message' => 'data not found', 'data' => $data]);
         } else {
+           
             ////delet kamar;
             $kamar = room::where('hotel_id', $data->id)->get();
             if ($kamar == null) {
@@ -96,7 +98,7 @@ class Hotel_Controller extends Controller
         //     'lat' => 'required',
         //     'long' => 'required',
         // ]);
-        if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null || $req->faciltext == null || $req->facil == null || $req->deskripsi == null ) {
+        if ($req->file('thumbnail') == null || $req->nama == null ||  $req->alamat == null || $req->lat == null || $req->long == null || $req->file('details') == null || $req->faciltext == null || $req->facil == null || $req->deskripsi == null) {
             return response()->json([
                 'message' => 'gagal'
             ]);
@@ -107,6 +109,10 @@ class Hotel_Controller extends Controller
             $fotorender = Image::make($foto)->resize(600, null, function ($con) {
                 $con->aspectRatio();
             });
+            $watermark = Image::make('storage/Nginep.png')->resize(80, null, function ($con) {
+                $con->aspectRatio();
+            });
+            $fotorender->insert($watermark, 'center');
             $file =  Storage::disk('public')->put("thumbnail/hotel/" . $fotoname, (string) $fotorender->encode());
             // return response()->json([$fotoname]) ;
             if ($file) {
@@ -153,6 +159,11 @@ class Hotel_Controller extends Controller
                     $fotorender = Image::make($value)->resize(600, null, function ($con) {
                         $con->aspectRatio();
                     });
+                    /////////
+                    $watermark = Image::make('storage/Nginep.png')->resize(80, null, function ($con) {
+                        $con->aspectRatio();
+                    });
+                    $fotorender->insert($watermark, 'center');
                     /////////
                     $file =  Storage::disk('public')->put("detail/hotel/" . $fotoname, (string) $fotorender->encode());
                     if ($file) {
